@@ -7,7 +7,7 @@ import chalk from "chalk";
 import rimraf from "rimraf";
 
 import {create as createServerConfig} from "./webpack.server";
-import {create as createClientConfig} from "./webpack.client";
+//import {create as createClientConfig} from "./webpack.client";
 
 const $ = require("gulp-load-plugins")();
 
@@ -17,6 +17,7 @@ gulp.task("clean:server", cb => rimraf("./build", cb));
 gulp.task("clean:client", cb => rimraf("./public/build", cb));
 gulp.task("clean", gulp.parallel("clean:server", "clean:client"));
 gulp.task("dev:server", gulp.series("clean:server", devServerBuild));
+gulp.task("dev", gulp.series("clean", devServerBuild, gulp.parallel(devServerWatch, devServerReload)));
 gulp.task("prod:server", gulp.series("clean:server", prodServerBuild));
 //----------------------------------------
 //Private Server Tasks
@@ -36,13 +37,34 @@ function devServerWatch() {
 	});
 }
 
-function prodServerBuild() {
+function devServerReload() {
+	return $.nodemon({
+		script: "./build/server.js",
+		watch: "./build",
+		env: {
+			"NODE_ENV": "development",
+			"USE_WEBPACK": "true"
+		}
+	});
+}
 
+function prodServerBuild(callback) {
+	prodServerWebpack.run((error,stats)=> {
+		outputWebpack("Prod:Server", error, stats);
+		callback();
+	});
 }
 //-----------------------------------------
 //Helpers
 function outputWebpack(label, error, stats) {
-	console.log(stats.toString());
+	if(error)
+		throw new Error(error);
+	if(stats.hasErrors()){
+		$.util.log(stats.toString({colors: true}));
+	}else {
+		const time = stats.endTime - stats.startTime;
+		$.util.log(chalk.bgGreen(`Built ${label} in ${time} ms.`));
+	}
 }
 
 

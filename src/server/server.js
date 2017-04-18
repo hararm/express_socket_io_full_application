@@ -6,3 +6,4 @@ import {blegh} from "../shared/blegh";
 
 blegh();
 console.log("FROM SERVER");
+console.log("WHOA");
