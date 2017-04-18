@@ -106,6 +106,7 @@ var _blegh = __webpack_require__(0);
  */
 (0, _blegh.blegh)();
 console.log("FROM SERVER");
+console.log("WHOA");
 
 /***/ })
 /******/ ]);
