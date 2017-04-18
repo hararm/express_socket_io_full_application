@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="EslintConfiguration">
-    <custom-configuration-file used="true" path="C:\Dev_Git\express_socket_io_full_application\.eslintrc.json" />
+    <custom-configuration-file used="true" path="$PROJECT_DIR$/.eslintrc.json" />
   </component>
 </project>
